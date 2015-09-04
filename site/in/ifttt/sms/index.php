@@ -6,10 +6,10 @@
     // URL: http://example.com/switchboard/in/ifttt/sms/
     // Method: POST
     // Content Type: application/x-www-form-urlencoded
-    // Body: Content={{Message}}&From={{From}}
+    // Body: content={{Message}}&from={{From}}
 
-    $content = $_POST['Content'];
-    $fromphone = $_POST['From'];
+    $content = $_POST['content'];
+    $fromphone = $_POST['from'];
     // TODO: bail if these aren't set
 
     // for debugging:
