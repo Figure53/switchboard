@@ -1,0 +1,4 @@
+Authtype Basic
+AuthName "Switchboard"
+AuthUserFile /home/user/path/to/.htpasswd
+Require valid-user
