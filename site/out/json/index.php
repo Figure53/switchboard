@@ -10,7 +10,7 @@
     }
     else
     {
-        $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created FROM $TABLE_NAME ORDER BY id DESC";
+        $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved FROM $TABLE_NAME ORDER BY id DESC";
         $result = $db->query($sql);
         $rows = array();
         for ($i=0; $i < $result->num_rows; $i++) { 
