@@ -145,6 +145,9 @@
         </div>
         <div class="col-md-4">
             <h3>JSON</h3>
+            <p>
+                <a href="<?php echo HOST ?>/out/json/" target="_blank"><?php echo HOST ?>/out/json/</a>
+            </p>
         </div>
         <div class="col-md-4">
             <h3>XML</h3>
