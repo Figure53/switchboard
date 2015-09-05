@@ -78,9 +78,9 @@
         
         // QUERY LIST OF MESSAGES FOR THIS PAGE (optionally filtering by approval)
         if (!is_null($message_approved))
-            $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME WHERE approved = ? ORDER BY created DESC LIMIT 25 OFFSET ?");
+            $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME WHERE approved = ? ORDER BY created,id DESC LIMIT 25 OFFSET ?");
         else
-            $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME ORDER BY created DESC LIMIT 25 OFFSET ?");
+            $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME ORDER BY created DESC,id DESC LIMIT 25 OFFSET ?");
         if ($query_statement)
         {
             if (!is_null($message_approved))
