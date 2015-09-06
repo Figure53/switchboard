@@ -8,7 +8,22 @@
     }
     else
     {
-        $sql = "SELECT content FROM $TABLE_NAME ORDER BY id DESC LIMIT 1";
+        if (!empty($_GET['type']))
+          $type = $_GET['type'];
+        else 
+          $type = "all";
+        
+        switch ($type) {
+          case 'approved':
+            $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 1 ORDER BY id DESC LIMIT 1";
+            break;
+          case 'pending':
+            $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 0 ORDER BY id DESC LIMIT 1";
+            break;
+          default:
+            $sql = "SELECT content FROM $TABLE_NAME ORDER BY id DESC LIMIT 1";
+            break;
+        }
         $result = $db->query($sql);
         $row = $result->fetch_row();
         $content = htmlspecialchars($row[0], ENT_QUOTES, 'UTF-8');
