@@ -25,8 +25,8 @@
                           `inputsource` text,
                           `fromphone` text,
                           `content` text,
-                          `approved` tinyint(3) unsigned NOT NULL DEFAULT '0',
-                          `used` tinyint(3) unsigned NOT NULL DEFAULT '0',
+                          `approved` tinyint(3) NOT NULL DEFAULT '0',
+                          `used` tinyint(3) NOT NULL DEFAULT '0',
                           PRIMARY KEY (id)
                         ) DEFAULT CHARSET=utf8";
             }
