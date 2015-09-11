@@ -204,16 +204,16 @@
                 echo "    <input type=\"hidden\" name=\"message_id\" value=\"$row_id\" />";
                 if ( $row_approved == 0 )
                 {
-                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"approve\" />";
-                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"reject\" />";
+                    echo "    <input class=\"form-control btn-success\" type=\"submit\" name=\"submit\" value=\"approve\" />";
+                    echo "    <input class=\"form-control btn-danger\" type=\"submit\" name=\"submit\" value=\"reject\" />";
                 }
                 else if ( $row_approved < 0 )
                 {
-                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"approve\" />";
+                    echo "    <input class=\"form-control btn-success\" type=\"submit\" name=\"submit\" value=\"approve\" />";
                 }
                 else if ( $row_approved > 0 )
                 {
-                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"reject\" />";
+                    echo "    <input class=\"form-control btn-danger\" type=\"submit\" name=\"submit\" value=\"reject\" />";
                 }
                 echo "    </form>";
                 echo "</td>";
