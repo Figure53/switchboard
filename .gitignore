@@ -3,5 +3,4 @@ CONFIG.php
 deploy.sh
 site/admin/.htaccess
 site/admin/.htpasswd
-iftttpasswd
-twiliopasswd
+passwds.txt
