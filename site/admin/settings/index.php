@@ -23,8 +23,8 @@
                           `id` int NOT NULL AUTO_INCREMENT,
                           `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                           `inputsource` text,
-                          `fromphone` text,
                           `content` text,
+                          `fromphone` text,
                           `approved` tinyint(3) NOT NULL DEFAULT '0',
                           `used` tinyint(3) NOT NULL DEFAULT '0',
                           PRIMARY KEY (id)

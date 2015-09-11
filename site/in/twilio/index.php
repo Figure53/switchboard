@@ -2,8 +2,8 @@
     require "../../CONFIG.php";
     //require BASEPATH . "/third-party/twilio-php/Services/Twilio.php";
 
-    $fromphone = $_REQUEST['From'];
     $content = $_REQUEST['Body'];
+    $fromphone = $_REQUEST['From'];
     // TODO: bail if these aren't set
 
     $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -32,8 +32,8 @@
     }
 ?>
 <?php
-header("content-type: text/xml");
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+header("Content-Type: text/xml");
+echo '<?xml version="1.0" encoding="utf-8"?>';
 ?>
 <Response>
     <Message>

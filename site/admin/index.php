@@ -62,12 +62,12 @@
                 {
                     $error = "Unable to update approval for message ID $message_id";
                 }
+                $statement->close();
             }
             else
             {
                 $error = "Unable to prepare update for database.";
             }
-            $statement->close();
         }
         
         // QUERY NUMBER OF APPROVED MESSAGES
