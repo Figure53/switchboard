@@ -1,7 +1,7 @@
 .DS_Store
 CONFIG.php
 deploy.sh
-site/.htaccess
-site/.htpasswd
+site/admin/.htaccess
+site/admin/.htpasswd
 iftttpasswd
 twiliopasswd
