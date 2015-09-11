@@ -20,8 +20,12 @@
 
         // BASIC VARIABLE SETUP
         $message_id = $_POST['message_id'];
-        $message_flag = $_POST['message_flag'];
-        $message_approved = $_REQUEST['approved'];
+        $message_submit = $_POST['submit'];
+        if ($message_submit == "approve")
+            $message_mark = 1;
+        else if ($message_submit == "reject")
+            $message_mark = -1;
+        $message_show_approved = $_REQUEST['approved'];
         $page = $_REQUEST['page'];
         if (empty($page))
             $page = 1;
@@ -45,18 +49,18 @@
             $offset = 0;
         
         // UPDATE INDIVIDUAL MESSAGE APPROVAL IF NECESSRY
-        if (!empty($message_id) && !is_null($message_flag))
+        if (!empty($message_id) && !is_null($message_mark))
         {
             $statement = $db->prepare("UPDATE $TABLE_NAME SET approved=? WHERE id=?");
             if ($statement)
             {
-                $statement->bind_param( 'is', $message_flag, $message_id );
+                $statement->bind_param( 'is', $message_mark, $message_id );
                 if ( $statement->execute() )
                 {
-                    if ($message_flag == 1)
+                    if ($message_mark == 1)
                         $message_approval_message = "Approved message ID $message_id";
                     else
-                        $message_info_message = "Cancelled approval for message ID $message_id";
+                        $message_info_message = "Rejected message ID $message_id";
                 }
                 else
                 {
@@ -77,14 +81,14 @@
         $result->close();
         
         // QUERY LIST OF MESSAGES FOR THIS PAGE (optionally filtering by approval)
-        if (!is_null($message_approved))
+        if (!is_null($message_show_approved))
             $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME WHERE approved = ? ORDER BY created DESC,id DESC LIMIT 25 OFFSET ?");
         else
             $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME ORDER BY created DESC,id DESC LIMIT 25 OFFSET ?");
         if ($query_statement)
         {
-            if (!is_null($message_approved))
-                $query_statement->bind_param( 'ii', $message_approved, $offset ); 
+            if (!is_null($message_show_approved))
+                $query_statement->bind_param( 'ii', $message_show_approved, $offset ); 
             else
                 $query_statement->bind_param( 'i', $offset ); 
               
@@ -114,9 +118,10 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li <?php if (is_null($message_approved)) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/">All</a></li>
-        <li <?php if (!is_null($message_approved) && $message_approved == 0) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=0">Pending</a></li>
-        <li <?php if ($message_approved == 1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=1">Approved</a></li>
+        <li <?php if (is_null($message_show_approved)) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/">All</a></li>
+        <li <?php if (!is_null($message_show_approved) && $message_show_approved == 0) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=0">Pending</a></li>
+        <li <?php if ($message_show_approved == 1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=1">Approved</a></li>
+        <li <?php if ($message_show_approved == -1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=-1">Rejected</a></li>
         <li><a href="<?php echo HOST ?>/admin/settings/">Settings</a></li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -178,10 +183,6 @@
             while ($query_statement->fetch())
             {
                 $content = htmlspecialchars($row_content, ENT_QUOTES, 'UTF-8');
-                if ($row_approved)
-                    $flag = 0;
-                else
-                    $flag = 1;
               
                 echo "<tr>";
                 echo "<td>" . $row_id . "</td>";
@@ -191,19 +192,29 @@
                 echo "<td>" . $content . "</td>";
                 if ( $row_approved == 0 )
                     echo "<td> </td>";
-                else
+                else if ( $row_approved > 0 )
                     echo "<td> <img src=\"img/check.png\"/> </td>";
+                else
+                    echo "<td> <img src=\"img/x.png\"/> </td>";
                 echo "<td>";
                 echo "    <form class=\"form-inline\" action=\"" . HOST . "/admin/\" method=\"POST\" target=\"_self\">";
                 echo "    <input type=\"hidden\" name=\"page\" value=\"$page\" />";
-                if (!is_null($message_approved))
-                    echo "    <input type=\"hidden\" name=\"approved\" value=\"$message_approved\" />";
+                if (!is_null($message_show_approved))
+                    echo "    <input type=\"hidden\" name=\"approved\" value=\"$message_show_approved\" />";
                 echo "    <input type=\"hidden\" name=\"message_id\" value=\"$row_id\" />";
-                echo "    <input type=\"hidden\" name=\"message_flag\" value=\"$flag\" />";
                 if ( $row_approved == 0 )
+                {
                     echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"approve\" />";
-                else
-                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"cancel\" />";
+                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"reject\" />";
+                }
+                else if ( $row_approved < 0 )
+                {
+                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"approve\" />";
+                }
+                else if ( $row_approved > 0 )
+                {
+                    echo "    <input class=\"form-control\" type=\"submit\" name=\"submit\" value=\"reject\" />";
+                }
                 echo "    </form>";
                 echo "</td>";
                 echo "</tr>\n";

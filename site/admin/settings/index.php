@@ -78,6 +78,7 @@
         <li><a href="<?php echo HOST ?>/admin/">All</a></li>
         <li><a href="<?php echo HOST ?>/admin/?approved=0">Pending</a></li>
         <li><a href="<?php echo HOST ?>/admin/?approved=1">Approved</a></li>
+        <li><a href="<?php echo HOST ?>/admin/?approved=-1">Rejected</a></li>
         <li class="active"><a href="<?php echo HOST ?>/admin/settings/">Settings</a></li>
       </ul>
     </div><!--/.nav-collapse -->
