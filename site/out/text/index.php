@@ -30,6 +30,5 @@
         $result->close();
         mysqli_close($db);
     }
-
 ?>
 <?php echo $content; ?>
