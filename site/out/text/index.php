@@ -3,6 +3,7 @@
     require "../../CONFIG.php";
     require BASEPATH . "/helpers/request_limit.php";
     require BASEPATH . "/helpers/request_offset.php";
+    require BASEPATH . "/helpers/request_random.php";
 
     $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if (mysqli_connect_errno())
@@ -22,23 +23,38 @@
         switch ($type)
         {
             case 'approved':
-                $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                if ($random)
+                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 1 ORDER BY RAND() LIMIT ? ";
+                else
+                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
             case 'pending':
-                $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 0 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                if ($random)
+                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 0 ORDER BY RAND() LIMIT ? ";
+                else
+                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 0 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
             case 'rejected':
-                $sql = "SELECT content FROM $TABLE_NAME WHERE approved = -1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                if ($random)
+                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = -1 ORDER BY RAND() LIMIT ? ";
+                else
+                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = -1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
             default:
-                $sql = "SELECT content FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                if ($random)
+                    $sql = "SELECT content FROM $TABLE_NAME ORDER BY RAND() LIMIT ? ";
+                else
+                    $sql = "SELECT content FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
         }
 
         $statement = $db->prepare($sql);
         if ($statement)
         {
-            $statement->bind_param( 'ii', $limit, $offset );
+            if ($random)
+                $statement->bind_param( 'i', $limit );
+            else
+                $statement->bind_param( 'ii', $limit, $offset );
             if ($statement->execute())
             {
                 $result = $statement->get_result();

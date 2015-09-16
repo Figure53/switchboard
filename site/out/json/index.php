@@ -3,6 +3,7 @@
     require "../../CONFIG.php";
     require BASEPATH . "/helpers/request_limit.php";
     require BASEPATH . "/helpers/request_offset.php";
+    require BASEPATH . "/helpers/request_random.php";
 
     $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if (!mysqli_connect_errno())
