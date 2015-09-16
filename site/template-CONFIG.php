@@ -14,6 +14,7 @@ $TABLE_NAME = "switchboard"; // Should not need to change this.
 //$AccountSid = "TWILIO_SECRET";
 //$AuthToken = "TWILIO_SECRET";
 
+$form_prompt = "Prompt"; // TEMPORARY - will change this to user-editable in settings screen
 
 /// Should not need to change anything below this line. ///
 

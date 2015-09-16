@@ -110,9 +110,13 @@
 
     <div class="row">
         <div class="col-md-4">
-
             <h3>Form</h3>
-
+            <p>
+                Input: enabled
+            </p>
+            <p>
+                <code id="inform" onclick="selectText('inform')"><?php echo HOST ?>/in/form/</code>
+            </p>
         </div>
         <div class="col-md-4">
             <h3>Twilio</h3>
