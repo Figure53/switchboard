@@ -182,7 +182,7 @@
         }
         else
         {
-            $query_statement->bind_result($row_id, $row_created, $row_inputsource, $row_fromphone, $row_content, $row_approved, $row_used);
+            $query_statement->bind_result($row_id, $row_created, $row_inputsource, $row_content, $row_fromphone, $row_approved, $row_used);
             
             while ($query_statement->fetch())
             {
