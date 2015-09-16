@@ -110,12 +110,17 @@
 
     <div class="row">
         <div class="col-md-4">
+
+            <h3>Form</h3>
+
+        </div>
+        <div class="col-md-4">
             <h3>Twilio</h3>
             <p>
                 Input: enabled
             </p>
             <p>
-                <code><?php echo HOST ?>/in/twilio/</code>
+                <code id="intwilio" onclick="selectText('intwilio')"><?php echo HOST ?>/in/twilio/</code>
             </p>
         </div>
         <div class="col-md-4">
@@ -124,13 +129,8 @@
                 Input: enabled
             </p>
             <p>
-                <code><?php echo HOST ?>/in/ifttt/sms/</code>
+                <code id="inifttt" onclick="selectText('inifttt')"><?php echo HOST ?>/in/ifttt/sms/</code>
             </p>
-        </div>
-        <div class="col-md-4">
-
-            <h3>Pusher</h3>
-
         </div>
     </div>
 
@@ -160,6 +160,20 @@
             <p>
                 <a href="<?php echo HOST ?>/out/xml/" target="_blank"><?php echo HOST ?>/out/xml/</a>
             </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h3>CSV</h3>
+            <p>
+                <a href="<?php echo HOST ?>/out/csv/" target="_blank"><?php echo HOST ?>/out/csv/</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+           
+        </div>
+        <div class="col-md-4">
+           
         </div>
     </div>
 
