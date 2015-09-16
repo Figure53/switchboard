@@ -12,11 +12,17 @@
         $db->query("SET NAMES utf8");
         $db->query("SET CHARACTER SET utf8");
 
-        $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+        if ($random)
+            $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved FROM $TABLE_NAME ORDER BY RAND() LIMIT ? ";
+        else
+            $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
         $statement = $db->prepare($sql);  
         if ($statement)
         {
-            $statement->bind_param( 'ii', $limit, $offset );
+            if ($random)
+                $statement->bind_param('i', $limit);
+            else
+                $statement->bind_param('ii', $limit, $offset);
             if ($statement->execute())
             {
                 $result = $statement->get_result();
