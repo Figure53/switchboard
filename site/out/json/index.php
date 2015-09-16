@@ -1,4 +1,4 @@
-<?php header('Content-Type: application/json'); ?>
+<?php header('Content-Type: application/json; charset=utf-8'); ?>
 <?php
     require "../../CONFIG.php";
     require BASEPATH . "/helpers/request_limit.php";
@@ -7,6 +7,10 @@
     $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if (!mysqli_connect_errno())
     {
+        $db->set_charset("utf8");
+        $db->query("SET NAMES utf8");
+        $db->query("SET CHARACTER SET utf8");
+
         $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
         $statement = $db->prepare($sql);  
         if ($statement)

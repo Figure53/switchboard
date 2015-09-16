@@ -10,6 +10,10 @@
     }
     else
     {
+        $db->set_charset("utf8");
+        $db->query("SET NAMES utf8");
+        $db->query("SET CHARACTER SET utf8");
+        
         $exists = table_exists( $db, $TABLE_NAME );
         if (is_null($exists) || !$exists)
         {

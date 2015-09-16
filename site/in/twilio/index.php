@@ -13,6 +13,10 @@
     }
     else
     {
+        $db->set_charset("utf8");
+        $db->query("SET NAMES utf8");
+        $db->query("SET CHARACTER SET utf8");
+
         $statement = $db->prepare("INSERT INTO $TABLE_NAME (inputsource, content, fromphone) VALUES (?, ?, ?)");
         if ($statement)
         {
@@ -37,6 +41,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 ?>
 <Response>
     <Message>
-        <?php echo $result; ?>
+        <?php 
+            echo $result; 
+            //echo $content;
+        ?>
     </Message>
 </Response>

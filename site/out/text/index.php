@@ -1,3 +1,4 @@
+<?php header('Content-Type: text/plain; charset=utf-8'); ?>
 <?php
     require "../../CONFIG.php";
     require BASEPATH . "/helpers/request_limit.php";
@@ -10,6 +11,10 @@
     }
     else
     {
+        $db->set_charset("utf8");
+        $db->query("SET NAMES utf8");
+        $db->query("SET CHARACTER SET utf8");
+
         if (!empty($_REQUEST['type']))
             $type = $_REQUEST['type'];
         else 

@@ -10,6 +10,10 @@
     }
     else
     {
+        $db->set_charset("utf8");
+        $db->query("SET NAMES utf8");
+        $db->query("SET CHARACTER SET utf8");
+
         $exists = table_exists( $db, $TABLE_NAME );
         if (is_null($exists))
             $error = "Unable to check for table named '$TABLE_NAME'.";
@@ -28,7 +32,7 @@
                           `approved` tinyint(3) NOT NULL DEFAULT '0',
                           `used` tinyint(3) NOT NULL DEFAULT '0',
                           PRIMARY KEY (id)
-                        ) DEFAULT CHARSET=utf8";
+                        ) DEFAULT CHARSET=utf8"; // utf8mb4?
             }
             else if ($table_action == 'drop')
             {
@@ -88,6 +92,7 @@
 <div class="container">
 
 <?php
+
     if (!empty($error))
     {
         echo "<div class=\"alert alert-danger\" role=\"alert\">
