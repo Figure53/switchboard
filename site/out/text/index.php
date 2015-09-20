@@ -22,29 +22,36 @@
             $type = "all";
         switch ($type)
         {
-            case 'approved':
+            case 'all':
                 if ($random)
-                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 1 ORDER BY RAND() LIMIT ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME ORDER BY RAND() LIMIT ? ";
                 else
-                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
             case 'pending':
                 if ($random)
-                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 0 ORDER BY RAND() LIMIT ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE approved = 0 ORDER BY RAND() LIMIT ? ";
                 else
-                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = 0 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE approved = 0 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
             case 'rejected':
                 if ($random)
-                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = -1 ORDER BY RAND() LIMIT ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE approved = -1 ORDER BY RAND() LIMIT ? ";
                 else
-                    $sql = "SELECT content FROM $TABLE_NAME WHERE approved = -1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE approved = -1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
+            case 'unused':
+                if ($random)
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE used = 0 ORDER BY RAND() LIMIT ? ";
+                else
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE used = 0 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                break;
+            case 'approved':
             default:
                 if ($random)
-                    $sql = "SELECT content FROM $TABLE_NAME ORDER BY RAND() LIMIT ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE approved = 1 ORDER BY RAND() LIMIT ? ";
                 else
-                    $sql = "SELECT content FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+                    $sql = "SELECT id, content, used FROM $TABLE_NAME WHERE approved = 1 ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
                 break;
         }
 
@@ -61,10 +68,23 @@
 
                 while ($row = $result->fetch_row())
                 {
-                    $content = $row[0];
+                    $id = $row[0];
+                    $content = $row[1];
+                    $used = $row[2];
                     $content = trim(preg_replace('/\s+/', ' ', $content));
                     $content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
-                    echo $content . "\n";
+                    echo $id . " (" . $used . "): " . $content . "\n";
+
+                    if ($used == false)
+                    {
+                        $set_used = $db->prepare("UPDATE $TABLE_NAME SET used = 1 WHERE id = ?");
+                        if ($set_used)
+                        {
+                            $set_used->bind_param( 'i', $id );
+                            $set_used->execute();
+                            $set_used->close();
+                        }
+                    }
                 }
 
                 $result->close();

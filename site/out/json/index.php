@@ -13,9 +13,9 @@
         $db->query("SET CHARACTER SET utf8");
 
         if ($random)
-            $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved FROM $TABLE_NAME ORDER BY RAND() LIMIT ? ";
+            $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved,used FROM $TABLE_NAME ORDER BY RAND() LIMIT ? ";
         else
-            $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
+            $sql = "SELECT id,inputsource,content,fromphone,DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%s0Z') as created,approved,used FROM $TABLE_NAME ORDER BY id " . $order . " LIMIT ? OFFSET ? ";
         $statement = $db->prepare($sql);  
         if ($statement)
         {
@@ -30,6 +30,19 @@
                 while ($row = $result->fetch_array(MYSQLI_ASSOC))
                 {
                     array_push($rows,$row);
+
+                    $id = $row['id'];
+                    $used = $row['used'];
+                    if ($used == false)
+                    {
+                        $set_used = $db->prepare("UPDATE $TABLE_NAME SET used = 1 WHERE id = ?");
+                        if ($set_used)
+                        {
+                            $set_used->bind_param( 'i', $id );
+                            $set_used->execute();
+                            $set_used->close();
+                        }
+                    }
                 }
                 $result->close();
                 echo json_encode($rows);
