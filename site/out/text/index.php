@@ -73,7 +73,7 @@
                     $used = $row[2];
                     $content = trim(preg_replace('/\s+/', ' ', $content));
                     $content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
-                    echo $id . " (" . $used . "): " . $content . "\n";
+                    echo $content . "\n";
 
                     if ($used == false)
                     {
