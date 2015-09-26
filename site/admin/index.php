@@ -165,7 +165,7 @@
 ?>    
     <div class="row">
         <div class="col-sm-6">
-            <p><b>&nbsp;<?php echo $total_approved_messages ?> approved, <b>&nbsp;<?php echo $total_used_messages ?> used, <?php echo $total_messages ?> total</b></p>
+            <p><b>&nbsp;<?php echo $total_approved_messages ?> approved, <?php echo $total_used_messages ?> used, <?php echo $total_messages ?> total</b></p>
         </div>
       
         <div class="col-sm-6 text-right">          
