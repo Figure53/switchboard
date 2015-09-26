@@ -70,7 +70,7 @@
 					<div class="form-group">
 						<label class="switchboard-prompt text-right" for="content"><?php echo $form_prompt; ?></label>
 						<input class="switchboard-ok btn-default btn-lg" type="submit" name="submit" value="ok" />
-						<input class="switchboard-content" id="content" name="content" type="text" maxlength="45" />
+						<input class="switchboard-content" id="content" name="content" type="text" maxlength="140" />
 					</div>
 				</form>
 			</div>
