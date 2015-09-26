@@ -30,6 +30,7 @@
         else if ($message_submit == "reject")
             $message_mark = -1;
         $message_show_approved = $_REQUEST['approved'];
+        $message_show_used = $_REQUEST['used'];
         $page = $_REQUEST['page'];
         if (empty($page))
             $page = 1;
@@ -83,19 +84,28 @@
         $row = $result->fetch_row();
         $total_approved_messages = $row[0];
         $result->close();
+
+        // QUERY NUMBER OF USED MESSAGES
+        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE used != 0" );
+        $row = $result->fetch_row();
+        $total_used_messages = $row[0];
+        $result->close();
         
         // QUERY LIST OF MESSAGES FOR THIS PAGE (optionally filtering by approval)
         if (!is_null($message_show_approved))
             $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME WHERE approved = ? ORDER BY created DESC,id DESC LIMIT 25 OFFSET ?");
+        elseif (!is_null($message_show_used))
+            $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME WHERE used = ? ORDER BY created DESC,id DESC LIMIT 25 OFFSET ?");
         else
             $query_statement = $db->prepare("SELECT * FROM $TABLE_NAME ORDER BY created DESC,id DESC LIMIT 25 OFFSET ?");
         if ($query_statement)
         {
             if (!is_null($message_show_approved))
                 $query_statement->bind_param( 'ii', $message_show_approved, $offset ); 
+            elseif (!is_null($message_show_used))
+                $query_statement->bind_param( 'ii', $message_show_used, $offset );
             else
                 $query_statement->bind_param( 'i', $offset ); 
-              
             if ( !$query_statement->execute() )
             {
                 $error = "Unable to query database.";
@@ -122,10 +132,12 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li <?php if (is_null($message_show_approved)) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/">All</a></li>
+        <li <?php if (is_null($message_show_approved) && is_null($message_show_used)) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/">All</a></li>
         <li <?php if (!is_null($message_show_approved) && $message_show_approved == 0) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=0">Pending</a></li>
         <li <?php if ($message_show_approved == 1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=1">Approved</a></li>
         <li <?php if ($message_show_approved == -1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=-1">Rejected</a></li>
+        <li <?php if ($message_show_used == 1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?used=1">Used</a></li>
+        <li <?php if (!is_null($message_show_used) && $message_show_used == 0) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?used=0">Unused</a></li>
         <li><a href="<?php echo HOST ?>/admin/settings/">Settings</a></li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -153,7 +165,7 @@
 ?>    
     <div class="row">
         <div class="col-sm-6">
-            <p><b>&nbsp;<?php echo $total_approved_messages ?> approved, <?php echo $total_messages ?> total</b></p>
+            <p><b>&nbsp;<?php echo $total_approved_messages ?> approved, <b>&nbsp;<?php echo $total_used_messages ?> used, <?php echo $total_messages ?> total</b></p>
         </div>
       
         <div class="col-sm-6 text-right">          

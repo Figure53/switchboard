@@ -59,6 +59,19 @@
                 }
                 $statement->close();  
             }
+
+            // $table_name_admin = $TABLE_NAME + "_admin";
+            // if ($table_action == 'create')
+            // {
+            //     $sql_admin = "CREATE TABLE IF NOT EXISTS `$table_name_admin` (
+            //                   `flag` text NOT NULL,
+            //                   `value` tinyint(3) DEFAULT '0'
+            //                 ) DEFAULT CHARSET=utf8";
+            // }
+            // else if ($table_action == 'drop')
+            // {
+            //     $sql_admin = "DROP TABLE IF EXISTS `$table_name_admin`";
+            // }
         }
 
         mysqli_close($db);
@@ -83,6 +96,8 @@
         <li><a href="<?php echo HOST ?>/admin/?approved=0">Pending</a></li>
         <li><a href="<?php echo HOST ?>/admin/?approved=1">Approved</a></li>
         <li><a href="<?php echo HOST ?>/admin/?approved=-1">Rejected</a></li>
+        <li><a href="<?php echo HOST ?>/admin/?used=1">Used</a></li>
+        <li><a href="<?php echo HOST ?>/admin/?unused=0">Unused</a></li>
         <li class="active"><a href="<?php echo HOST ?>/admin/settings/">Settings</a></li>
       </ul>
     </div><!--/.nav-collapse -->
