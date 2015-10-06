@@ -11,8 +11,8 @@
     <title>Switchboard</title>
     
     <link rel="stylesheet" href="<?php echo HOST ?>/admin/styles.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="<?php echo HOST ?>/third-party/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo HOST ?>/third-party/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css">
 
     <script src="<?php echo HOST ?>/admin/js/helpers.js"></script>
     
