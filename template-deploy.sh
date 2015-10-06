@@ -5,4 +5,5 @@ rsync -avz --delete --rsh=ssh \
 --exclude .gitignore \
 --exclude template-CONFIG.php \
 --exclude template-htaccess \
+--exclude index-template.php \
 site/ user@example.com:/path/to/switchboard

@@ -3,5 +3,6 @@ CONFIG.php
 deploy.sh
 site/admin/.htaccess
 site/admin/.htpasswd
+site/in/form/index.php
 iftttpasswd
 twiliopasswd
