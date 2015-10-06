@@ -49,8 +49,8 @@
     <title></title>
     
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="<?php echo HOST ?>/third-party/bootstrap-3.3.5-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="<?php echo HOST ?>/third-party/bootstrap-3.3.5-dist/css/bootstrap-theme.css">
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -66,18 +66,34 @@
 			<div class="col-md-1">
 			</div>
 			<div class="col-md-10">
-			<?php echo "<form class=\"form-horizontal\" action=\"" . HOST . "/in/form/\" method=\"POST\" target=\"_self\">"; ?>
-					<div class="form-group">
-						<label class="switchboard-prompt text-right" for="content"><?php echo $form_prompt; ?></label>
-						<input class="switchboard-ok btn-default btn-lg" type="submit" name="submit" value="ok" />
-						<input class="switchboard-content" id="content" name="content" type="text" maxlength="140" />
+				<h2 class="text-center">Intro Title</h2>
+				<p class="text-center lead">
+					lead explanatory paragraph
+				</p>
+				<p class="text-center">
+					<a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom"
+					title="" data-content="message you want to appear in the popup">learn more</a>
+				</p>
+			</div>
+			<div class="col-md-1">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-1">
+			</div>
+			<div class="col-md-10">
+				<?php echo "<form class=\"form-vertical\" action=\"" . HOST . "/in/form/\" method=\"POST\" target=\"_self\">"; ?>
+					<div class="form-group-lg">
+						<p class="switchboard-prompt">Prompt:</p>
+						<textarea class="form-control" rows="3" name="content" maxlength="140"></textarea>
+						<p class="text-right switchboard-chars-remaining"><span id="chars">140</span> characters remaining</p>
+						<input class="switchboard-ok btn btn-default btn-lg" type="submit" name="submit" value="ok" />
 					</div>
 				</form>
 			</div>
 			<div class="col-md-1">
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="col-md-2">
 			</div>
@@ -93,11 +109,24 @@
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="<?php echo HOST ?>/third-party/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
 
     <script>
+    	$(document).ready(function(){
+		    $('[data-toggle="popover"]').popover(); 
+		});
+
 		$(document).ready(function() {
 	        $("#switchboard-result").fadeOut(3000);
+		});
+
+		$(document).ready(function() {
+		    var maxLength = 140;
+		    $('textarea').keyup(function() {
+		        var length = $(this).val().length;
+		        var length = maxLength-length;
+		        $('#chars').text(length);
+		    });
 		});
 	</script>
 </body>
