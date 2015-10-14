@@ -1,5 +1,5 @@
 body {
-  padding-top: 100px;
+  padding-top: 80px;
   padding-bottom: 20px;
 }
 
@@ -23,7 +23,7 @@ body {
 }
 
 .switchboard-result {
-	padding-top: 100px;
+	padding-top: 50px;
 	font-size: 42px;
 	font-family: "Helvetica", sans-serif;
 }

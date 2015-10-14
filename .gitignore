@@ -4,5 +4,6 @@ deploy.sh
 site/admin/.htaccess
 site/admin/.htpasswd
 site/in/form/index.php
+site/in/form/styles.css
 iftttpasswd
 twiliopasswd
