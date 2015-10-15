@@ -8,7 +8,7 @@
     $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if (mysqli_connect_errno())
     {
-        echo "Error: could not connect to database.";
+        //echo "Error: could not connect to database.";
     }
     else
     {
@@ -91,13 +91,13 @@
             }
             else
             {
-                echo "Error: could not execute statement.";
+                //echo "Error: could not execute statement.";
             }
             $statement->close();
         }
         else
         {
-            echo "Error: could not prepare statement.";
+            //echo "Error: could not prepare statement.";
         }
 
         mysqli_close($db);
