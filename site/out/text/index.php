@@ -72,7 +72,7 @@
                     $content = $row[1];
                     $used = $row[2];
                     $content = trim(preg_replace('/\s+/', ' ', $content));
-                    $content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
+                    $content = htmlspecialchars($content, ENT_NOQUOTES, 'UTF-8');
                     echo $content . "\n";
 
                     if ($used == false)

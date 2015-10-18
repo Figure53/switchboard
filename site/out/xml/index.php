@@ -33,7 +33,7 @@
                 {
                     echo "  <row>\n";
                     foreach($row as $key => $value) {
-                        $safeValue = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+                        $safeValue = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
                         echo "    <{$key}>{$safeValue}</{$key}>\n";
                     }
                     echo "  </row>\n";

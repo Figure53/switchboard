@@ -198,7 +198,7 @@
             
             while ($query_statement->fetch())
             {
-                $content = htmlspecialchars($row_content, ENT_QUOTES, 'UTF-8');
+                $content = htmlspecialchars($row_content, ENT_NOQUOTES, 'UTF-8');
               
                 echo "<tr>";
                 echo "<td>" . $row_id . "</td>";
