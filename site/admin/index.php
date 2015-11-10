@@ -31,27 +31,14 @@
             $message_mark = -1;
         $message_show_approved = $_REQUEST['approved'];
         $message_show_used = $_REQUEST['used'];
+        $message_show_pending = !is_null($message_show_approved) && $message_show_approved == 0;
+        $message_show_unused = !is_null($message_show_used) && $message_show_used == 0;
+        $message_show_all = is_null($message_show_approved) && is_null($message_show_used);
         $page = $_REQUEST['page'];
         if (empty($page))
             $page = 1;
         if ($page < 1)
             $page = 1;
-        
-        // QUERY TOTAL MESSAGES
-        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME" );
-        $row = $result->fetch_row();
-        $total_messages = $row[0];
-        $result->close();
-        
-        // MORE VARIABLE SETUP
-        $total_pages = ceil( $total_messages / 25 );
-        if ($page > $total_pages)
-            $page = $total_pages;
-        $prev_page = $page - 1;
-        $next_page = $page + 1;
-        $offset = ($page - 1) * 25;
-        if ($offset < 0)
-            $offset = 0;
         
         // UPDATE INDIVIDUAL MESSAGE APPROVAL IF NECESSRY
         if (!empty($message_id) && !is_null($message_mark))
@@ -78,18 +65,64 @@
                 $error = "Unable to prepare update for database.";
             }
         }
-        
+
+        // QUERY TOTAL MESSAGES
+        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME" );
+        $row = $result->fetch_row();
+        $total_messages = $row[0];
+        $result->close();
+
+        // QUERY NUMBER OF PENDING MESSAGES
+        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE approved = 0" );
+        $row = $result->fetch_row();
+        $total_pending_messages = $row[0];
+        $result->close();
+
         // QUERY NUMBER OF APPROVED MESSAGES
-        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE approved != 0" );
+        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE approved = 1" );
         $row = $result->fetch_row();
         $total_approved_messages = $row[0];
         $result->close();
 
+        // QUERY NUMBER OF REJECTED MESSAGES
+        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE approved = -1" );
+        $row = $result->fetch_row();
+        $total_rejected_messages = $row[0];
+        $result->close();
+
         // QUERY NUMBER OF USED MESSAGES
-        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE used != 0" );
+        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE used = 1" );
         $row = $result->fetch_row();
         $total_used_messages = $row[0];
         $result->close();
+
+        // QUERY NUMBER OF UNUSED MESSAGES
+        $result = $db->query( "SELECT COUNT(*) FROM $TABLE_NAME WHERE used = 0" );
+        $row = $result->fetch_row();
+        $total_unused_messages = $row[0];
+        $result->close();
+        
+        // MORE VARIABLE SETUP
+        $total_pages = ceil( $total_messages / 25 );
+        if ( $message_show_pending )
+            $total_pages = ceil( $total_pending_messages / 25 );
+        if ( $message_show_approved == 1 )
+            $total_pages = ceil( $total_approved_messages / 25 );
+        if ( $message_show_approved == -1 )
+            $total_pages = ceil( $total_rejected_messages / 25 );
+        if ( $message_show_used == 1 )
+            $total_pages = ceil( $total_used_messages / 25 );
+        if ( $message_show_unused )
+            $total_pages = ceil( $total_unused_messages / 25 );
+
+        // CONSTRAIN PAGE
+        if ($page > $total_pages)
+            $page = $total_pages;
+        $prev_page = $page - 1;
+        $next_page = $page + 1;
+        $offset = ($page - 1) * 25;
+        if ($offset < 0)
+            $offset = 0;
         
         // QUERY LIST OF MESSAGES FOR THIS PAGE (optionally filtering by approval)
         if (!is_null($message_show_approved))
@@ -132,12 +165,12 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li <?php if (is_null($message_show_approved) && is_null($message_show_used)) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/">All</a></li>
-        <li <?php if (!is_null($message_show_approved) && $message_show_approved == 0) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=0">Pending</a></li>
+        <li <?php if ($message_show_all) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/">All</a></li>
+        <li <?php if ($message_show_pending) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=0">Pending</a></li>
         <li <?php if ($message_show_approved == 1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=1">Approved</a></li>
         <li <?php if ($message_show_approved == -1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?approved=-1">Rejected</a></li>
         <li <?php if ($message_show_used == 1) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?used=1">Used</a></li>
-        <li <?php if (!is_null($message_show_used) && $message_show_used == 0) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?used=0">Unused</a></li>
+        <li <?php if ($message_show_unused) echo "class=\"active\""; ?>><a href="<?php echo HOST ?>/admin/?used=0">Unused</a></li>
         <li><a href="<?php echo HOST ?>/admin/settings/">Settings</a></li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -165,7 +198,20 @@
 ?>    
     <div class="row">
         <div class="col-sm-6">
-            <p><b>&nbsp;<?php echo $total_approved_messages ?> approved, <?php echo $total_used_messages ?> used, <?php echo $total_messages ?> total</b></p>
+            <?php 
+                if ($message_show_all)
+                    echo "<p><b>&nbsp;" . $total_messages . " total</b></p>";
+                if ($message_show_pending)
+                    echo "<p><b>&nbsp;" . $total_pending_messages . " pending</b></p>";
+                if ($message_show_approved == 1)
+                    echo "<p><b>&nbsp;" . $total_approved_messages . " approved</b></p>";
+                if ($message_show_approved == -1)
+                    echo "<p><b>&nbsp;" . $total_rejected_messages . " rejected</b></p>";
+                if ($message_show_used == 1)
+                    echo "<p><b>&nbsp;" . $total_used_messages . " used</b></p>";
+                if ($message_show_unused)
+                    echo "<p><b>&nbsp;" . $total_unused_messages . " unused</b></p>";
+            ?>
         </div>
       
         <div class="col-sm-6 text-right">          
