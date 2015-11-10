@@ -187,6 +187,18 @@
             <p>
                 <a href="<?php echo HOST ?>/out/csv/" target="_blank"><?php echo HOST ?>/out/csv/</a>
             </p>
+            <p>
+                <a href="<?php echo HOST ?>/out/csv/?limit=100" target="_blank">Most Recent 100</a>
+            </p>
+            <p>
+                <a href="<?php echo HOST ?>/out/csv/?limit=1000" target="_blank">Most Recent 1000</a>
+            </p>
+            <p>
+                <a href="<?php echo HOST ?>/out/csv/?limit=100&amp;type=approved" target="_blank">Most Recent 100 Approved</a>
+            </p>
+            <p>
+                <a href="<?php echo HOST ?>/out/csv/?limit=1000&amp;type=approved" target="_blank">Most Recent 1000 Approved</a>
+            </p>
         </div>
         <div class="col-md-4">
            
